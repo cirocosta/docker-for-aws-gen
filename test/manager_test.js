@@ -25,4 +25,22 @@ describe('Manager', () => {
       Value: "value",
     });
   });
+
+  it('should handle custom install code', () => {
+    let manager = new Manager(template, {
+      CustomTags: {
+        "com.key": "value"
+      }
+    });
+
+    const modifiedTemplate = manager.create();
+    const modifiedTemplateTags = modifiedTemplate.Resources.ManagerAsg.Properties.Tags;
+
+    console.log(modifiedTemplateTags);
+    assert.deepInclude(modifiedTemplateTags, {
+      Key: "com.key",
+      PropagateAtLaunch: true, 
+      Value: "value",
+    });
+  });
 });
