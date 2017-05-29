@@ -1,0 +1,17 @@
+{
+  "name": "docker-for-aws-gen",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "array-union": "^1.0.2",
+    "deep-diff": "^0.3.8",
+    "deep-extend": "^0.5.0",
+    "mocha": "^3.4.2"
+  }
+}
