@@ -1,23 +1,28 @@
 'use strict';
 
-const assert = require('assert');
+const assert = require('chai').assert;
 const objectExtend = require('deep-extend');
 const arrayUnion = require('array-union');
+const template = require('../templates/17.05.0-ce/edge/template.json');
+
+const Manager = require('../lib/manager.js');
 
 describe('Manager', () => {
-  it('array union', () => {
-    const arr1 = [ 1, 2 ];
-    const arr2 = [ 0, 1 ];
-  
-    const res = arrayUnion([], arr1, arr2);
-    console.log(res);
-  });
+  it('should handle custom tags', () => {
+    let manager = new Manager(template, {
+      CustomTags: {
+        "com.key": "value"
+      }
+    });
 
-  it('object extending', () => {
-    const obj1 = {a: "lol"};
-    const obj2 = {b: "hue"};
-  
-    const res = objectExtend({}, obj1, obj2);
-    console.log(res);
+    const modifiedTemplate = manager.create();
+    const modifiedTemplateTags = modifiedTemplate.Resources.ManagerAsg.Properties.Tags;
+
+    console.log(modifiedTemplateTags);
+    assert.deepInclude(modifiedTemplateTags, {
+      Key: "com.key",
+      PropagateAtLaunch: true, 
+      Value: "value",
+    });
   });
 });
