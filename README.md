@@ -100,6 +100,60 @@ const opts = {
 ## Full Example
 
 
+Having the following `config.json`:
+
+```json
+{
+  "Manager": {
+    "Labels": [
+      "com.type=test"
+    ],
+    "CustomTags": {
+      "test": "test"
+    },
+    "AfterDaemonStarted": [
+      "echo this is cool!\n",
+      "echo :D\n"
+    ]
+  },
+
+  "Workers": [
+    {
+      "Name": "Infra",
+      "Labels": [
+        "com.type=test"
+      ],
+      "CustomTags": {
+        "test": "test"
+      },
+      "AfterDaemonStarted": [
+        "echo this is cool!\n",
+        "echo :D\n"
+      ]
+    }
+  ]
+}
+```
+
+and a docker-for-aws template in `./templates/17.06.0-ce/edge/template.json`:
+
+```sh
+$ docker-for-aws-gen -t ./templates/17.06.0-ce/edge/template.json -c ./config.json
+
+
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Conditions": {
+    "CloudStorSelected": {
+      "Fn::Equals": [
+        {
+          "Ref": "EnableCloudStor"
+        },
+        "yes"
+        ...
+```
+
+
 ## LICENSE
 
 MIT

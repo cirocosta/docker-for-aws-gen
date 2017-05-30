@@ -1,0 +1,30 @@
+{
+  "Manager": {
+    "Labels": [
+      "com.type=test"
+    ],
+    "CustomTags": {
+      "test": "test"
+    },
+    "AfterDaemonStarted": [
+      "echo this is cool!\n",
+      "echo :D\n"
+    ]
+  },
+
+  "Workers": [
+    {
+      "Name": "Infra",
+      "Labels": [
+        "com.type=test"
+      ],
+      "CustomTags": {
+        "test": "test"
+      },
+      "AfterDaemonStarted": [
+        "echo this is cool!\n",
+        "echo :D\n"
+      ]
+    }
+  ]
+}

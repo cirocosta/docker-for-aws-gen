@@ -6,41 +6,38 @@
 // template that is used on AWS to generate a many-instance-type
 // Docker Swarm cluster.
 
-const template = require('../templates/17.05.0-ce/edge/template.json');
+const fs = require('async-file');
 const Manager = require('../lib/manager.js');
 const Worker = require('../lib/worker.js');
-
-let temp = new Manager(template, {
-  CustomTags: {
-    "com.key": "value",
-  },
-
-  AfterDaemonStarted: [
-    "echo this-is-a-test\n",
-  ],
-
-  Labels: [
-    "key=value",
-    "com.key=value",
-  ],
-}).create();
+const argv = require('yargs')
+  .usage("Usage: $0 -t [Docker.tmpl] -c [config]")
+  .demandOption(['t','c'])
+  .argv;
 
 
-temp = new Worker(temp, {
-  Name: "Infra",
+(async () => {
+  let config = {};
+  let template = {};
 
-  CustomTags: {
-    "com.cirocosta.type": "infra",
-  },
+  try {
+    config = JSON.parse(await fs.readFile(argv.c, 'utf8'));
+  } catch (err) {
+    console.error(`Couldn't parse config file at ${argv.c}`, err)
+    process.exit(1);
+  }
 
-  AfterDaemonStarted: [
-    "echo docker volume create\n",
-  ],
+  try {
+    template = JSON.parse(await fs.readFile(argv.t, 'utf8'));
+  } catch (err) {
+    console.error(`Couldn't parse template file at ${argv.c}`, err)
+    process.exit(1);
+  }
 
-  Labels: [
-    "test=test2",
-  ],
-}).create();
+  let modifiedTemplate = new Manager(template, config.Manager).create();
+  for (let worker of config.Workers) {
+    modifiedTemplate = new Worker(modifiedTemplate, worker).create();
+  }
 
+  console.log(JSON.stringify(modifiedTemplate,null ,2));
+})()
 
-console.log(JSON.stringify(temp,null,2));
