@@ -6,6 +6,9 @@
   "scripts": {
     "test": "mocha test"
   },
+  "bin": {
+    "docker-for-aws-gen": "./bin/index.js"
+  },
   "author": "",
   "license": "MIT",
   "dependencies": {
