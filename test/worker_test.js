@@ -70,4 +70,17 @@ describe('Worker', () => {
     assert.equal(workerAsg.CreationPolicy.ResourceSignal.Count.Ref, 'InfraWorkerSize');
   });
 
+
+  it('Should modify the WorkerLaunchConfig', () => {
+    let worker = new Worker(template, {
+      Name: "Infra",
+    });
+
+    const newTempl = worker.create();
+    const launchConfig = newTempl.Resources[`InfraWorkerLaunchConfig${worker._versionString}`];
+
+    assert.isObject(launchConfig);
+    assert.equal(launchConfig.Properties.InstanceType.Ref, 'InfraWorkerInstanceType');
+  });
+
 });
