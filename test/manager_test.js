@@ -29,11 +29,14 @@ describe('Manager', () => {
     let manager = new Manager(template, {
       AfterDaemonStarted: [
         "echo this-is-a-test\n",
+        "echo this-is-a-test\n",
       ]
     });
 
     manager.create();
-    assert.include(manager._getLaunchConfigCode(), 'echo this-is-a-test\n');
+    assert.include(
+      manager._getLaunchConfigCode(), 
+      'echo this-is-a-test\necho this-is-a-test\n');
   });
 
 
