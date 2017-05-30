@@ -57,4 +57,17 @@ describe('Worker', () => {
     assert.equal(launchConfig.Type, 'AWS::AutoScaling::LaunchConfiguration');
   });
 
+
+  it('Should modify the AutoScalingGroup', () => {
+    let worker = new Worker(template, {
+      Name: "Infra",
+    });
+
+    const newTempl = worker.create();
+    const workerAsg = newTempl.Resources.InfraWorkerAsg
+
+    assert.isObject(workerAsg);
+    assert.equal(workerAsg.CreationPolicy.ResourceSignal.Count.Ref, 'InfraWorkerSize');
+  });
+
 });
