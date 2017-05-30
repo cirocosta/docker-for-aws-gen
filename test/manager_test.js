@@ -33,7 +33,22 @@ describe('Manager', () => {
       ]
     });
 
-    const modifiedTemplate = manager.create();
-    console.log(manager._getLaunchConfigCode());
+    manager.create();
+    assert.include(manager._getLaunchConfigCode(), 'echo this-is-a-test\n');
+  });
+
+
+  it('should modify labels to have custom labelling', () => {
+    let manager = new Manager(template, {
+      Labels: [
+        "key=value",
+        "com.key=value",
+      ]
+    });
+
+
+    manager.create();
+    assert.include(manager._getLaunchConfigCode(),
+      'echo \'{"experimental": \'$DOCKER_EXPERIMENTAL\', "labels":["os=linux","key=value","com.key=value", "region=\'$NODE_REGION\'", "availability_zone=\'$NODE_AZ\'", "instance_type=\'$INSTANCE_TYPE\'", "node_type=\'$NODE_TYPE\'"] \' > /etc/docker/daemon.json\n');
   });
 });
