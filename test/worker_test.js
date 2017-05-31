@@ -83,4 +83,15 @@ describe('Worker', () => {
     assert.equal(launchConfig.Properties.InstanceType.Ref, 'InfraWorkerInstanceType');
   });
 
+  it('Should modify the InstanceName environment variable', () => {
+    let worker = new Worker(template, {
+      Name: "Infra",
+    });
+
+    worker.create();
+
+    console.log(worker._getLaunchConfigCode());
+    assert.include(worker._getLaunchConfigCode(), "export INSTANCE_NAME=\'InfraWorkerAsg\'\n");
+  });
+
 });
