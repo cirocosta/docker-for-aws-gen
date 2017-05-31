@@ -89,8 +89,6 @@ describe('Worker', () => {
     });
 
     worker.create();
-
-    console.log(worker._getLaunchConfigCode());
     assert.include(worker._getLaunchConfigCode(), "export INSTANCE_NAME=\'InfraWorkerAsg\'\n");
   });
 
