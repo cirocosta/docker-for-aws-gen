@@ -19,6 +19,18 @@ describe('Worker', () => {
     assert.equal(newTempl.Parameters.InfraWorkerSize.Default, '5');
   });
 
+  it('Should create copy of Disk parameters', () => {
+    let worker = new Worker(template, {
+      Name: "Infra",
+    });
+
+    const newTempl = worker.create();
+    assert.isObject(newTempl.Parameters.InfraWorkerDiskType);
+    assert.isObject(newTempl.Parameters.InfraWorkerDiskSize);
+
+    assert.equal(newTempl.Parameters.InfraWorkerDiskSize.Default, '20');
+    assert.equal(newTempl.Parameters.InfraWorkerDiskType.Default, 'standard');
+  });
 
   it('Should create copy of InstanceType', () => {
     let worker = new Worker(template, {
